@@ -1,0 +1,111 @@
+/* Make HTML and body content viewable, layout to fill window */
+html,
+body
+{
+  padding:20px;
+  margin:0px;
+  background: rgba(40,40,40,0.1);
+  border: 5px solid hsl(314,0%,40%);
+  box-sizing: border-box;
+}
+html {
+  min-height:100vh;
+}
+body {
+  min-height:calc(100vh - 40px);
+}
+
+
+/* Give all semantic body elements uniform layout style */
+header,
+nav,
+main,
+footer,
+aside,
+section,
+article,
+details,
+w{
+  margin: 5px;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+/* Give each semantic body element a different color */
+header
+{
+  background-color: hsl(0,100%,97%);
+  border: 5px solid hsl(0,100%,60%);
+}
+nav
+{
+  background-color: hsl(210,100%,97%);
+  border: 5px solid hsl(210,100%,60%);
+}
+
+main
+{
+  background-color: hsl(120,100%,97%);
+  border: 5px solid hsl(120,100%,40%);
+}
+
+footer
+{
+  background-color: hsl(300,100%,97%);
+  border: 5px solid hsl(300,100%,80%);
+}
+aside
+{
+  background-color: hsl(180,100%,97%);
+  border: 5px solid hsl(180,100%,40%);
+}
+section
+{
+  background-color: hsl(30,100%,97%);
+  border: 5px solid hsl(30,100%,60%);
+}
+article, details
+{
+  background-color: hsl(270,100%,97%);
+  border: 5px solid hsl(270,100%,60%);
+}
+div {
+  background-color: hsl(240,100%,95%);
+  border: 5px solid hsl(240,100%,40%);  
+}
+
+/* HTML 4 Deprecated Tags and Attributes*/
+center,
+font,
+menu,
+marquee,
+*[align],
+*[border],
+*[color],
+*[bgcolor]
+{
+  padding:10px;
+  background: repeating-linear-gradient(315deg, #999 0px, #999 20px, #FF9 20px, #FF9 40px) !important;
+  border:20px solid black;
+}
+frame,
+table {
+  padding:10px;
+  background: repeating-linear-gradient(315deg, #999 0px, #999 20px, #9FF 20px, #9FF 40px) !important;
+}
+
+center::after,
+font::after,
+menu::after,
+marquee::after,
+*[align]::after,
+*[border]::after,
+*[color]::after,
+*[bgcolor]::after
+{ 
+  content:"Do not use HTML4 deprecated styling tags and attributes in your assignments";
+  font-size:800%;
+  color:red;
+  font-weight:bold;
+  text-shadow: 1px 1px 3px white;
+}
