@@ -5,59 +5,11 @@
  * Date: 26/7/17
  * Time: 2:39 AM
  */
+    session_start();
+    include_once('tools.php');
+    top_mid_part('Home');
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <link type="text/css" rel="stylesheet" href="css/primary.css">
-    <link type="text/css" rel="stylesheet" href="css/responsive.css">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="manifest" href="manifest.json">
-    <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
-    <script src="bin/wireframe.js"></script>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>The Silverado Cinema</title>
-</head>
-<body>
-<header>
-    <!-- wireframe switch -->
-    <div id="wireframe">
-        <span>
-            <input type="checkbox" id="wireframecss" onchange="loadCSS()">
-            <label for="wireframecss">Wireframe CSS</label>
-        </span>
-    </div>
-    <div class="container wrap header clearfloat">
-        <a href="index.php"><img src="img/logo_blue.png" height="122"/></a>
-    </div>
-</header>
-<nav>
-    <!-- menu by Elwyn -->
-    <div id="menu" class="container clearfloat shadow">
-        <ul>
-            <li><a href="index.php">Home</a></li>
-            <li><a href="showing.php">Now Showing</a></li>
-            <!--   <li><a href="#location">Location</a></li>
-               <li><a href="#contact">Contact</a></li>
-               <li><a href="#about">About</a></li> -->
-        </ul>
-    </div>
-    <div id="dropmenu" class="clearfloat container" style="display: none;">
-        <select  title="submenu navigation"  name="dropmenu" onchange="window.location.href=this.value">
-            <option value="">Menu</option>
-            <option value="index.php">Home</option>
-            <option value="showing.php">Now Showing</option>
-        </select>
-    </div>
-</nav>
-<main id="wrap">
-    <div id="page" class="masthead clearfloat">
-        <div id="maincont" class="container">
-            <div class="full-width left">
-                <div class="content full-page clearfloat shadow">
+
                     <div class="content-row whitecontent">
                         <div class="full-width">
                             <H1>Silverado</H1>
@@ -115,22 +67,6 @@
                             <p>Ideal environment and premium seats draw you in and maximize your enjoyment.</p>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
-<footer class="container clearfloat footer shadow">
-    <div class="footer-padding footer-cont">
-        <div class="foot-col">
-            <h2>Silverado Cinema &copy; <?php echo date("Y"); ?></h2>
-            <p>The best seat in town</p>
-
-        </div>
-        <div class="foot-col">
-            <p><a target="_blank" href="http://www.dolby.com/us/en/platforms/dolby-cinema.html">About Dolby&trade;
-                    Technology</a></p>
-        </div>
-    </div>
-</footer>
-</body>
+<?php
+    include_once('footer.php')
+?>
