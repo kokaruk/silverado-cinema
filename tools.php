@@ -67,3 +67,9 @@ function navMenu()
 MENUSECTION;
         return $navigation;
     }
+
+function getDebugURL(){
+    return $_SERVER['SERVER_NAME'] == 'titan.csit.rmit.edu.au'
+                                    ? '/home/eh1/e54061/public_html/wp/debug.php'
+                                    : 'debug-lite.php';
+}

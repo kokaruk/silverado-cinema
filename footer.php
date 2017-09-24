@@ -18,3 +18,7 @@
 </footer>
 </body>
 </html>
+
+<?php
+    include_once (getDebugURL());
+?>

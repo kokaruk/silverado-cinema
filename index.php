@@ -67,6 +67,7 @@
                             <p>Ideal environment and premium seats draw you in and maximize your enjoyment.</p>
                         </div>
                     </div>
+
 <?php
-    include_once('footer.php')
+    include_once('footer.php');
 ?>
