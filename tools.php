@@ -40,7 +40,9 @@ function top_mid_part($pageTitle)
             <div class="full-width left">
                 <div class="content full-page clearfloat shadow">
 TOPMIDDLE;
+    session_start();
     echo $output;
+    echo false;
 }
 
 function navMenu()

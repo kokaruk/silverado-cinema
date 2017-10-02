@@ -5,7 +5,6 @@
  * Date: 26/7/17
  * Time: 2:39 AM
  */
-session_start();
 include_once('tools.php');
 top_mid_part('Now Showing');
 ?>
