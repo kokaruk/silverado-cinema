@@ -1,4 +1,5 @@
 <?php
+session_start();
 function top_mid_part($pageTitle)
 {
     $navigation = navMenu();
@@ -40,7 +41,6 @@ function top_mid_part($pageTitle)
             <div class="full-width left">
                 <div class="content full-page clearfloat shadow">
 TOPMIDDLE;
-    session_start();
     echo $output;
     echo false;
 }
