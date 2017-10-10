@@ -7,194 +7,140 @@
  */
 include_once('tools.php');
 top_mid_part('Now Showing');
+list($movies, $options) = moviesShowing('data/movies.csv');
+function moviesShowing($filename)
+{
+    $row = 1;
+    $movies = "";
+    $options = '<option value="">Please Select</option>' . "\n";
+    if (($handle = fopen($filename, "r")) !== FALSE) {
+        while (($data = fgetcsv($handle)) !== FALSE) {
+            $movie = <<<"MOVIE"
+                <div class="movie">
+                    <a href="movie.php?movie=$data[0]">
+                        <div class="movie-inner">
+                            <div class="movie-item">
+                                <img src="img/$data[0].jpg" alt="$data[1]"/>
+                            </div>
+                            <div class="movie-info">
+                                <img class="img-blur" src="img/$data[0].jpg" alt="$data[1]"/>
+                                <div class="movie-info-inner">
+                                    <div class="movie-info-inner-title">
+                                        <h3>$data[1]</h3>
+                                        <p>$data[2]</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+MOVIE;
+            $row % 2 == 0
+                ? $movie .= "\n</div>\n"
+                : $movie = "<div>\n" . $movie . "\n";
+            $movies .= $movie;
+            $row++;
+            $options .= sprintf('<option value="%s">%s</option>', $data[7], $data[1]) . "\n";
+        }
+        fclose($handle);
+    }
+    return array($movies, $options);
+}
+
 ?>
-
-                    <div class="full-width content-row">
-                        <div class="nowshowing clearfloat">
-                            <h2>now showing</h2>
-                            <div>
-                                <div class="movie">
-                                    <a href="#">
-                                        <div class="movie-inner">
-                                            <div class="movie-item">
-
-                                                <img src="img/HO00004815.jpg" alt="Atomic Blonde"/>
-
-                                            </div>
-                                            <div class="movie-info">
-                                                <img class="img-blur" src="img/HO00004815.jpg" alt="Atomic Blonde"/>
-                                                <div class="movie-info-inner">
-                                                    <div class="movie-info-inner-title">
-                                                        <h3>Atomic Blonde</h3>
-                                                        <p>action</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="movie">
-                                    <a href="#">
-                                        <div class="movie-inner">
-                                            <div class="movie-item">
-                                                <img src="img/HO00004950.jpg" alt="Diary of a Wimpy Kid"/>
-                                            </div>
-                                            <div class="movie-info">
-                                                <img class="img-blur" src="img/HO00004950.jpg"/>
-                                                <div class="movie-info-inner">
-                                                    <div class="movie-info-inner-title">
-                                                        <h3>Diary of a Wimpy Kid</h3>
-                                                        <p>childrens</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="movie">
-                                    <a href="#">
-                                        <div class="movie-inner">
-                                            <div class="movie-item">
-
-                                                <img src="img/HO00005257.jpg" alt="big sick"/>
-
-                                            </div>
-                                            <div class="movie-info">
-                                                <img class="img-blur" src="img/HO00005257.jpg"/>
-                                                <div class="movie-info-inner">
-                                                    <div class="movie-info-inner-title">
-                                                        <h3>big sick</h3>
-                                                        <p>Romantic Comedy</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="movie">
-                                    <a href="#">
-                                        <div class="movie-inner">
-                                            <div class="movie-item">
-
-                                                <img src="img/HO00005496.jpg" alt="My Neighbour Totoro"/>
-
-                                            </div>
-                                            <div class="movie-info">
-                                                <img class="img-blur" src="img/HO00005496.jpg"/>
-                                                <div class="movie-info-inner">
-                                                    <div class="movie-info-inner-title">
-                                                        <h3>My Neighbour Totoro</h3>
-                                                        <p>Art / Foreign</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="bookingform" class="clearfloat">
-                            <form method='post'
-                                  action="https://titan.csit.rmit.edu.au/~e54061/wp/silverado-test.php?ref=showing"
-                                  target="_blank">
-                                <fieldset>
-                                    <legend><h2>Booking Form</h2></legend>
-                                    <div class="left"><label for="movie">Movie</label>
-                                        <select name='movie' id="movie" required>
-                                            <option value="">Please Select</option>
-                                            <option value='AC'>Aromic Blonde</option>
-                                            <option value='RC'>Diary of a Wimpy Kid</option>
-                                            <option value='CH'>The big sick</option>
-                                            <option value='AF'>My Neighbour Totoro</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="left clearfloat">
-                                        <label for="session">Session</label>
-                                        <select name='session' id="session" required>
-                                            <option value="">Please Select</option>
-                                            <option value='MON-13'>MON-13</option>
-                                            <option value='MON-18'>MON-18</option>
-                                            <option value='MON-21'>MON-21</option>
-                                            <option value='TUE-13'>TUE-13</option>
-                                            <option value='TUE-18'>TUE-18</option>
-                                            <option value='TUE-21'>TUE-21</option>
-                                            <option value='WED-13'>WED-13</option>
-                                            <option value='WED-18'>WED-18</option>
-                                            <option value='WED-21'>WED-21</option>
-                                            <option value='THU-13'>THU-13</option>
-                                            <option value='THU-18'>THU-18</option>
-                                            <option value='THU-21'>THU-21</option>
-                                            <option value='FRI-13'>FRI-13</option>
-                                            <option value='FRI-18'>FRI-18</option>
-                                            <option value='FRI-21'>FRI-21</option>
-                                            <option value='SAT-12'>SAT-12</option>
-                                            <option value='SAT-15'>SAT-15</option>
-                                            <option value='SAT-18'>SAT-18</option>
-                                            <option value='SAT-21'>SAT-21</option>
-                                            <option value='SUN-12'>SUN-12</option>
-                                            <option value='SUN-15'>SUN-15</option>
-                                            <option value='SUN-18'>SUN-18</option>
-                                            <option value='SUN-21'>SUN-21</option>
-                                        </select>
-                                    </div>
-                                    <div class="clearfloat"></div>
-                                    <div class="clearfloat">
-                                        <fieldset>
-                                            <legend><h3>Seats</h3></legend>
-                                            <fieldset class="left">
-                                                <legend>Standard</legend>
-                                                <div class="clearfloat">
-                                                    <p><label for="seats[SF]">Adult</label>
-                                                        <input type='number' name='seats[SF]' id='seats[SF]' value='0'
-                                                               min="0" max="10" inputmode="numeric" pattern="[0-9]*"/>
-                                                    </p>
-                                                    <p><label for="seats[SP]">Concession</label>
-                                                        <input type='number' name='seats[SP]' id='seats[SP]' value='0'
-                                                               min="0" max="10" inputmode="numeric" pattern="[0-9]*"/>
-                                                    </p>
-                                                    <p><label for="seats[SC]">Child</label>
-                                                        <input type='number' name='seats[SC]' id='seats[SC]' value='0'
-                                                               min="0" max="10" inputmode="numeric" pattern="[0-9]*"/>
-                                                    </p>
-                                            </fieldset>
-                                            <fieldset class="left">
-                                                <legend>First Class</legend>
-                                                <p><label for="seats[FA]">Adult</label>
-                                                    <input type='number' name='seats[FA]' id='seats[FA]' value='0'
-                                                           min="0" max="10" inputmode="numeric" pattern="[0-9]*"/>
-                                                </p>
-                                                <p><label for="seats[FC]">Child</label>
-                                                    <input type='number' name='seats[FC]' id='seats[FC]' value='0'
-                                                           min="0" max="10" inputmode="numeric" pattern="[0-9]*"/>
-                                                </p>
-                                            </fieldset>
-                                            <fieldset class="clearfloat">
-                                                <legend>Bean Bags</legend>
-                                                <p><label for="seats[BA]">Adult</label>
-                                                    <input type='number' name='seats[BA]' id='seats[BA]' value='0'
-                                                           min="0" max="10" inputmode="numeric" pattern="[0-9]*"/>
-                                                </p>
-                                                <p><label for="seats[BF]">Family</label>
-                                                    <input type='number' name='seats[BF]' id='seats[BF]' value='0'
-                                                           min="0" max="10" inputmode="numeric" pattern="[0-9]*"/>
-                                                </p>
-                                                <p><label for="seats[BC]">Child</label>
-                                                    <input type='number' name='seats[BC]' id='seats[BC]' value='0'
-                                                           min="0" max="10" inputmode="numeric" pattern="[0-9]*"/>
-                                                </p>
-                                            </fieldset>
-                                        </fieldset>
-                                </fieldset>
-                                <p>
-                                    <button>Book</button>
-                                </p>
-                            </form>
-                        </div>
+    <div class="full-width content-row">
+        <div class="nowshowing clearfloat">
+            <h2>now showing</h2>
+            <?php echo $movies ?>
+        </div>
+        <div id="bookingform" class="clearfloat">
+            <form method='post'
+                  action="https://titan.csit.rmit.edu.au/~e54061/wp/silverado-test.php"
+                  target="_blank">
+                <fieldset>
+                    <legend><h2>Booking Form</h2></legend>
+                    <div class="left"><label for="movie">Movie</label>
+                        <select name='movie' id="movie" required>
+                            <?php echo $options; ?>
+                        </select>
                     </div>
-
+                    <div class="left clearfloat">
+                        <label for="session">Session</label>
+                        <select name='session' id="session" required>
+                            <option value="">Please Select</option>
+                            <script type="text/javascript">
+                                var days = {
+                                    'MON': 'Monday',
+                                    'TUE': 'Tuesday',
+                                    'WED': 'Wednesday',
+                                    'THU': 'Thursday',
+                                    'FRI': 'Friday',
+                                    'SAT': 'Saturday',
+                                    'SUN': 'Sunday'
+                                };
+                                var hours = [12, 15, 18];
+                                for (var day in days) {
+                                    for (var i = 0; i < hours.length; i++) {
+                                        document.writeln("<option value='" + day + "-" + hours[i] + "'>" + days[day] + "&nbsp;" + hours[i] + ":00</option>")
+                                    }
+                                }
+                            </script>
+                        </select>
+                    </div>
+                    <div class="clearfloat"></div>
+                    <div class="clearfloat">
+                        <fieldset>
+                            <legend><h3>Seats</h3></legend>
+                            <fieldset class="left">
+                                <legend>Standard</legend>
+                                <div class="clearfloat">
+                                    <p><label for="seats[SF]">Adult</label>
+                                        <input type='number' name='seats[SF]' id='seats[SF]' value='0'
+                                               min="0" max="10" inputmode="numeric" pattern="[0-9]*"/>
+                                    </p>
+                                    <p><label for="seats[SP]">Concession</label>
+                                        <input type='number' name='seats[SP]' id='seats[SP]' value='0'
+                                               min="0" max="10" inputmode="numeric" pattern="[0-9]*"/>
+                                    </p>
+                                    <p><label for="seats[SC]">Child</label>
+                                        <input type='number' name='seats[SC]' id='seats[SC]' value='0'
+                                               min="0" max="10" inputmode="numeric" pattern="[0-9]*"/>
+                                    </p>
+                            </fieldset>
+                            <fieldset class="left">
+                                <legend>First Class</legend>
+                                <p><label for="seats[FA]">Adult</label>
+                                    <input type='number' name='seats[FA]' id='seats[FA]' value='0'
+                                           min="0" max="10" inputmode="numeric" pattern="[0-9]*"/>
+                                </p>
+                                <p><label for="seats[FC]">Child</label>
+                                    <input type='number' name='seats[FC]' id='seats[FC]' value='0'
+                                           min="0" max="10" inputmode="numeric" pattern="[0-9]*"/>
+                                </p>
+                            </fieldset>
+                            <fieldset class="clearfloat">
+                                <legend>Bean Bags</legend>
+                                <p><label for="seats[BA]">Adult</label>
+                                    <input type='number' name='seats[BA]' id='seats[BA]' value='0'
+                                           min="0" max="10" inputmode="numeric" pattern="[0-9]*"/>
+                                </p>
+                                <p><label for="seats[BF]">Family</label>
+                                    <input type='number' name='seats[BF]' id='seats[BF]' value='0'
+                                           min="0" max="10" inputmode="numeric" pattern="[0-9]*"/>
+                                </p>
+                                <p><label for="seats[BC]">Child</label>
+                                    <input type='number' name='seats[BC]' id='seats[BC]' value='0'
+                                           min="0" max="10" inputmode="numeric" pattern="[0-9]*"/>
+                                </p>
+                            </fieldset>
+                        </fieldset>
+                </fieldset>
+                <p>
+                    <button>Add to Cart</button>
+                </p>
+            </form>
+        </div>
+    </div>
 <?php
 include_once('footer.php')
 ?>

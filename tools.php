@@ -4,11 +4,12 @@ function top_mid_part($pageTitle)
 {
     $navigation = navMenu();
     $output = <<<"TOPMIDDLE"
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
-    <link type="text/css" rel="stylesheet" href="css/primary.css">
+    <link type="text/css" rel="stylesheet prefetch" href="css/primary.css">
     <link type="text/css" rel="stylesheet" href="css/responsive.css">
+    <link type="text/css" rel="stylesheet" href="css/modalstyle.css"
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -29,7 +30,22 @@ function top_mid_part($pageTitle)
         </span>
     </div>
     <div class="container wrap header clearfloat">
-        <a href="index.php"><img src="img/logo_blue.png" height="122"/></a>
+    <div id="cart">
+    <img src="img/account.svg" alt="account">
+    <a 
+       data-modalTitle=""  
+       data-modalDesc="" 
+       href="https://www.google.com/maps/place/147+Wardour+St,+Soho,+London+W1F+8WD,+UK/@51.514197,-0.134724,16z/data=!4m5!3m4!1s0x487604d357825039:0xf0c170d8fa918a9b!8m2!3d51.5141967!4d-0.1347244?hl=en-GB" 
+       data-modal="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d4175.8218601402605!2d-0.1390235133502716!3d51.51397674271494!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487604d357825039%3A0xf0c170d8fa918a9b!2s147+Wardour+St%2C+Soho%2C+London+W1F+8WD%2C+UK!5e0!3m2!1sen!2sin!4v1468326690641">
+      <img src="img/cart.svg" alt="cart" />
+    </a>
+    
+    
+        
+        
+        
+    </div>
+        <a href="index.php"><img src="img/logo_blue.png" height="122" alt="Silverado Cinema"/></a>
     </div>
 </header>
 <nav>

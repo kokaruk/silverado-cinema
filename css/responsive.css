@@ -61,7 +61,8 @@ only screen and (max-device-width: 767px) and (-webkit-min-device-pixel-ratio: 2
 only screen and (max-device-width: 767px) and (min-device-pixel-ratio: 2)
 {
     :root{font-size: 120%;}
-    .header {position: absolute;}
+    .header {position: absolute; text-align: left; padding: 10px !important;}
+    .header img {padding-top: 0.5rem; height: 70px;}
     body { line-height: normal;}
      { width: 100%; padding: 0;}
     .column-50 {text-align: center;}
@@ -71,7 +72,6 @@ only screen and (max-device-width: 767px) and (min-device-pixel-ratio: 2)
     img#floorplan{min-width: 80%; }
     #menu{display:none;}
     #wireframe{display: none;}
-    .header img {padding-top: 0.5rem; height: 70px;}
     nav {margin-top: 110px;}
     #page {padding-top: 0;}
     .footer{line-height: normal;}
@@ -120,8 +120,11 @@ only screen and (max-device-width: 767px) and (min-device-pixel-ratio: 2)
 }
 /*  #Mobile (Portrait)
 ================================================== */
-@media only screen and (min-width: 240px) and (max-width:479px) {
-
+@media only screen and (max-width: 479px),
+only screen and (max-device-width: 479px) and (-webkit-min-device-pixel-ratio: 2),
+only screen and (max-device-width: 479px) and (min-device-pixel-ratio: 2)
+{
+    .movie-detailed { width: 100%; text-align: center;    }
 
 }
 
