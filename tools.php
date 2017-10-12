@@ -1,7 +1,39 @@
 <?php
+//start session
 session_start();
+// add to cart form processor
+$seatSelect = seatSelect();
+if ($seatSelect) {
+    $_SESSION["cart"][] = $_POST;
+}
+
+function seatSelect(){
+    $seatSelect = false;
+    $appendingOrder = appendingOrder();
+    if ($appendingOrder){
+        // check if seats array has greater than 0 numbers
+        // iterate over all numbers
+        foreach ( $_POST["seats"] as $key => $value){
+            if (is_numeric($value) && $value > 0) {
+                $seatSelect = true;
+                break;
+            }
+        }
+    }
+    return $seatSelect;
+}
+
+function appendingOrder() {
+    return isset($_POST["appending"])  ;
+}
+
 function top_mid_part($pageTitle)
 {
+    // highlight current menu item
+    $here = $_SERVER['SCRIPT_NAME'];
+    $bits = explode('/',$here);
+    $filename = $bits[count($bits)-1];
+
     $navigation = navMenu();
     $output = <<<"TOPMIDDLE"
 <!DOCTYPE html>
@@ -9,7 +41,8 @@ function top_mid_part($pageTitle)
 <head>
     <link type="text/css" rel="stylesheet prefetch" href="css/primary.css">
     <link type="text/css" rel="stylesheet" href="css/responsive.css">
-    <link type="text/css" rel="stylesheet" href="css/modalstyle.css"
+    <link type="text/css" rel="stylesheet" href="css/modalstyle.css">
+    <style>nav a[href$="$filename"] { background-color: rgba(60,74,83,0.5); }</style>
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -31,19 +64,12 @@ function top_mid_part($pageTitle)
     </div>
     <div class="container wrap header clearfloat">
     <div id="cart">
-    <img src="img/account.svg" alt="account">
     <a 
-       data-modalTitle=""  
-       data-modalDesc="" 
-       href="https://www.google.com/maps/place/147+Wardour+St,+Soho,+London+W1F+8WD,+UK/@51.514197,-0.134724,16z/data=!4m5!3m4!1s0x487604d357825039:0xf0c170d8fa918a9b!8m2!3d51.5141967!4d-0.1347244?hl=en-GB" 
-       data-modal="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d4175.8218601402605!2d-0.1390235133502716!3d51.51397674271494!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487604d357825039%3A0xf0c170d8fa918a9b!2s147+Wardour+St%2C+Soho%2C+London+W1F+8WD%2C+UK!5e0!3m2!1sen!2sin!4v1468326690641">
-      <img src="img/cart.svg" alt="cart" />
-    </a>
-    
-    
-        
-        
-        
+       href="account.php" 
+       data-modal=""><img src="img/account.svg" alt="account"></a>
+    <a 
+       href="cart.php" 
+       data-modal=""><img src="img/cart.svg" alt="cart" /></a>
     </div>
         <a href="index.php"><img src="img/logo_blue.png" height="122" alt="Silverado Cinema"/></a>
     </div>
@@ -63,12 +89,12 @@ TOPMIDDLE;
 
 function navMenu()
     {
-        $menuOptions = ['index.php' => 'Home', 'showing.php' => 'Now Showing'];
+        $menuOptions = ['Home' => 'index.php', 'Now Showing' => 'showing.php'];
         $topMenu = "";
         $mobileMenu = "";
         foreach ($menuOptions as $key => $value) {
-            $topMenu .= "<li><a href=\"{$key}\">$value</a></li>\r\n";
-            $mobileMenu .= "<option value=\"{$key}\">$value</option>\r\n";
+            $topMenu .= "<li><a href=\"{$value}\">$key</a></li>\r\n";
+            $mobileMenu .= "<option value=\"{$value}\">$key</option>\r\n";
         }
         $navigation = <<< "MENUSECTION"
         <div id="menu" class="container clearfloat shadow">
@@ -86,8 +112,49 @@ MENUSECTION;
         return $navigation;
     }
 
-function getDebugURL(){
-    return $_SERVER['SERVER_NAME'] == 'titan.csit.rmit.edu.au'
-                                    ? '/home/eh1/e54061/public_html/wp/debug.php'
-                                    : 'debug-lite.php';
+function moviesShowing($filename)
+{
+    $row = 1;
+    $movies = "";
+    $options = '<option value="">Please Select</option>' . "\n";
+    if (($handle = fopen($filename, "r")) !== FALSE) {
+        while (($data = fgetcsv($handle)) !== FALSE) {
+            $movie = <<<"MOVIE"
+                <div class="movie">
+                    <a href="movie.php?movie=$data[0]">
+                        <div class="movie-inner">
+                            <div class="movie-item">
+                                <img src="img/$data[0].jpg" alt="$data[1]"/>
+                            </div>
+                            <div class="movie-info">
+                                <img class="img-blur" src="img/$data[0].jpg" alt="$data[1]"/>
+                                <div class="movie-info-inner">
+                                    <div class="movie-info-inner-title">
+                                        <h3>$data[1]</h3>
+                                        <p>$data[2]</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+MOVIE;
+            $row % 2 == 0
+                ? $movie .= "\n</div>\n"
+                : $movie = "<div>\n" . $movie . "\n";
+            $movies .= $movie;
+            $row++;
+            $seatSelect = seatSelect();
+            $appendingOrder = appendingOrder();
+            $seatSelect === false && $appendingOrder
+                ? $options .=
+                    sprintf('<option value="%s" %s>%s</option>',
+                        $data[7],
+                        $_POST["movie"] == $data[7] ? 'selected' : '',
+                        ucfirst($data[1])) . "\n"
+                : $options .= sprintf('<option value="%s">%s</option>', $data[7],  ucfirst($data[1])) . "\n"   ;
+        }
+        fclose($handle);
+    }
+    return array($movies, $options);
 }

@@ -82,8 +82,8 @@ var debounce=function(e,t,n){var a;return function(){var r=this,i=arguments,o=fu
     clone.className = modalName;
     clone.setAttribute("style", "position:fixed;visibility:hidden;transform: none");
     modalSection.parentElement.appendChild(clone);
-    size.width = clone.clientWidth; // more performant than getBoundingClientRect
-    size.height = clone.clientHeight; // more performant than getBoundingClientRect
+    size.width = clone.clientWidth-20; // more performant than getBoundingClientRect
+    size.height = clone.clientHeight-20; // more performant than getBoundingClientRect
     modalSection.parentElement.removeChild(clone);
     return size;
   };
@@ -332,7 +332,7 @@ var debounce=function(e,t,n){var a;return function(){var r=this,i=arguments,o=fu
     section.setAttribute("role", "dialog");
     section.modalSrc = modalLink.modalSrc;
 
-    section.appendChild(_getModalTitle(modalLink));
+   // section.appendChild(_getModalTitle(modalLink));
     section.appendChild(_getModalSVG("icon-loading", "svg-loading", "Loading"));
     section.appendChild(_getModalSVG("icon-loading", "svg-loading2", ""));
     section.appendChild(_getModalDesc(modalLink));

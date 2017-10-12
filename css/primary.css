@@ -328,6 +328,14 @@ img#floorplan {
     background-color: #1a2935;
 }
 
+/* error border */
+
+.errorgroup {
+
+    border: dashed 1px #cc0000;
+}
+
+
 /* footer */
 
 .footer {
@@ -428,7 +436,7 @@ img#floorplan {
     min-width: 30%;
 }
 
-movie-detailed-wrapper {
+.movie-detailed-wrapper {
     width: 100%;
 }
 
@@ -496,6 +504,10 @@ button:hover {
 }
 
 select {cursor: pointer; background: transparent;}
+select option:disabled {
+    color: var(--dark-back);
+    font-weight: 100;
+}
 
 #bookingform select {width: 90%;}
 #bookingform input[type="number"]  { width: 5rem; }

@@ -8,44 +8,6 @@
 include_once('tools.php');
 top_mid_part('Now Showing');
 list($movies, $options) = moviesShowing('data/movies.csv');
-function moviesShowing($filename)
-{
-    $row = 1;
-    $movies = "";
-    $options = '<option value="">Please Select</option>' . "\n";
-    if (($handle = fopen($filename, "r")) !== FALSE) {
-        while (($data = fgetcsv($handle)) !== FALSE) {
-            $movie = <<<"MOVIE"
-                <div class="movie">
-                    <a href="movie.php?movie=$data[0]">
-                        <div class="movie-inner">
-                            <div class="movie-item">
-                                <img src="img/$data[0].jpg" alt="$data[1]"/>
-                            </div>
-                            <div class="movie-info">
-                                <img class="img-blur" src="img/$data[0].jpg" alt="$data[1]"/>
-                                <div class="movie-info-inner">
-                                    <div class="movie-info-inner-title">
-                                        <h3>$data[1]</h3>
-                                        <p>$data[2]</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-MOVIE;
-            $row % 2 == 0
-                ? $movie .= "\n</div>\n"
-                : $movie = "<div>\n" . $movie . "\n";
-            $movies .= $movie;
-            $row++;
-            $options .= sprintf('<option value="%s">%s</option>', $data[7], $data[1]) . "\n";
-        }
-        fclose($handle);
-    }
-    return array($movies, $options);
-}
 
 ?>
     <div class="full-width content-row">
@@ -55,8 +17,10 @@ MOVIE;
         </div>
         <div id="bookingform" class="clearfloat">
             <form method='post'
-                  action="https://titan.csit.rmit.edu.au/~e54061/wp/silverado-test.php"
-                  target="_blank">
+                  id="bookingform"
+                  action="showing.php?ref=showing"
+                  >
+
                 <fieldset>
                     <legend><h2>Booking Form</h2></legend>
                     <div class="left"><label for="movie">Movie</label>
@@ -69,6 +33,11 @@ MOVIE;
                         <select name='session' id="session" required>
                             <option value="">Please Select</option>
                             <script type="text/javascript">
+                                var selectedTime =  <?php
+                                                    $seatSelect = seatSelect();
+                                                    $appendingOrder = appendingOrder();
+                                                    $seatSelect === false && $appendingOrder
+                                                    ? print "'" . $_POST["session"] . "'" : print "''" ; ?>;
                                 var days = {
                                     'MON': 'Monday',
                                     'TUE': 'Tuesday',
@@ -78,18 +47,27 @@ MOVIE;
                                     'SAT': 'Saturday',
                                     'SUN': 'Sunday'
                                 };
-                                var hours = [12, 15, 18];
+                                var hoursWeek = [1, 6, 9];
+                                var hoursWknd = [12, 3, 6, 9]
                                 for (var day in days) {
+                                    var hours = day === 'SAT' || day === 'SUN' ?  hoursWknd : hoursWeek;
                                     for (var i = 0; i < hours.length; i++) {
-                                        document.writeln("<option value='" + day + "-" + hours[i] + "'>" + days[day] + "&nbsp;" + hours[i] + ":00</option>")
+                                            var value = day + "-" + hours[i];
+                                            var option = days[day] + "&nbsp;" + hours[i] + ":00" ;
+                                            var selected = selectedTime === value ? 'selected' : '';
+                                            document.writeln("<option " + selected + " value='" + value + "'>" + option + "</option>")
                                     }
                                 }
                             </script>
                         </select>
                     </div>
                     <div class="clearfloat"></div>
-                    <div class="clearfloat">
-                        <fieldset>
+                    <div id="seats" class="clearfloat
+                    <?php $seatSelect = seatSelect();
+                    $appendingOrder = appendingOrder();
+                    if ($seatSelect === false && $appendingOrder)
+                    echo 'errorgroup' ?>">
+                        <fieldset >
                             <legend><h3>Seats</h3></legend>
                             <fieldset class="left">
                                 <legend>Standard</legend>
@@ -133,14 +111,20 @@ MOVIE;
                                            min="0" max="10" inputmode="numeric" pattern="[0-9]*"/>
                                 </p>
                             </fieldset>
+                             <?php
+                             $seatSelect = seatSelect();
+                             $appendingOrder = appendingOrder();
+                             if ($seatSelect === false && $appendingOrder)
+                             echo "<p style=\"color:#cc0000\">Must select at least one seat</p>" ?>
                         </fieldset>
                 </fieldset>
                 <p>
-                    <button>Add to Cart</button>
+                    <input type="submit" name="appending" value="Add to Cart"/>
                 </p>
             </form>
         </div>
     </div>
+    <script src="bin/calculation.js"></script>
 <?php
-include_once('footer.php')
+    include_once('footer.php')
 ?>

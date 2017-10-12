@@ -8,10 +8,9 @@
 include_once('tools.php');
 top_mid_part('Now Showing');
 function movieInfo($filename){
-    $movieId = $_GET['movie'];
     if (($handle = fopen($filename, "r")) !== FALSE) {
         while (($data = fgetcsv($handle)) != FALSE) {
-            if ($data[0] == $movieId) {
+            if ($data[0] == $_GET['movie']) {
                 $movie = <<<"MOVIE"
                 <h2>$data[1]</h2>
             <div>

@@ -50,7 +50,7 @@ only screen and (min-device-width: 768px) and (max-device-width: 977px) and (min
     input[type="password"], textarea, select {height: 3rem;}
     .movie-info-inner-title h3 {font-size: 1.1rem;}
     .movie-info-inner-title p {font-size: 1.2rem;}
-    button {font-size: 1.5rem; width: 30%;height: 3.5rem;}
+    button {font-size: 1.1rem; width: 30%;height: 3rem;}
 }
 
 
