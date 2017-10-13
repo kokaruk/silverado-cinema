@@ -16,7 +16,8 @@ list($movies, $options) = moviesShowing('data/movies.csv');
             <?php echo $movies ?>
         </div>
         <div id="bookingform" class="clearfloat">
-            <form method='post'
+            <form onsubmit="return boookingValidate();"
+                  method="post"
                   id="bookingform"
                   action="showing.php?ref=showing"
                   >
@@ -53,7 +54,7 @@ list($movies, $options) = moviesShowing('data/movies.csv');
                                     var hours = day === 'SAT' || day === 'SUN' ?  hoursWknd : hoursWeek;
                                     for (var i = 0; i < hours.length; i++) {
                                             var value = day + "-" + hours[i];
-                                            var option = days[day] + "&nbsp;" + hours[i] + ":00" ;
+                                            var option = days[day] + "&nbsp;" + hours[i] + "pm" ;
                                             var selected = selectedTime === value ? 'selected' : '';
                                             document.writeln("<option " + selected + " value='" + value + "'>" + option + "</option>")
                                     }
@@ -115,8 +116,9 @@ list($movies, $options) = moviesShowing('data/movies.csv');
                              $seatSelect = seatSelect();
                              $appendingOrder = appendingOrder();
                              if ($seatSelect === false && $appendingOrder)
-                             echo "<p style=\"color:#cc0000\">Must select at least one seat</p>" ?>
+                             echo "<p style=\"color:red\">Must select at least one seat</p>" ?>
                         </fieldset>
+                    </div>
                 </fieldset>
                 <p>
                     <input type="submit" name="appending" value="Add to Cart"/>

@@ -331,8 +331,7 @@ img#floorplan {
 /* error border */
 
 .errorgroup {
-
-    border: dashed 1px #cc0000;
+    border: dashed 1px red;
 }
 
 
