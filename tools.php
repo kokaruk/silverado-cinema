@@ -69,7 +69,7 @@ function top_mid_part($pageTitle)
     $filename = $bits[count($bits) - 1];
 
     $navigation = navMenu();
-    $cartContentCount = count($_SESSION["cart"]);
+    $cartContentCount = isset($_SESSION["cart"]) ? count($_SESSION["cart"]) : 0;
     $output = <<<"TOPMIDDLE"
 <!DOCTYPE html>
 <html>
