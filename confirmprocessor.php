@@ -82,7 +82,7 @@ function cartContent()
                 <tr>
                    <th>$name<br>$email<br>$phone</th>
                    <th>
-                        <img src="img/logo_blue.png" height="122" alt="Silverado Cinema"/><br>
+                        <img src="img/logo_blue.png" alt="Silverado Cinema" style="height: 80px; padding-bottom: 10px;"/><br>
                         %s <br>
                         %s                
                    </th>
