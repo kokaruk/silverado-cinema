@@ -1,20 +1,53 @@
 <?php
 //start session
 session_start();
-// add to cart form processor
-$seatSelect = seatSelect();
-if ($seatSelect) {
-    $_SESSION["cart"][] = $_POST;
-}
 
-function seatSelect(){
+/* global vars */
+$_filename = 'data/movies.csv';
+$_maxSeats = 10;
+$_formNoIssues = isset($_SESSION["errors"]) ? $_SESSION["errors"] : true;
+$_seatArrayNoIssues = isset($_SESSION["seatserror"]) ? $_SESSION["errors"] : true;
+
+$_weekDays = [
+    'MON' => 'Monday',
+    'TUE' => 'Tuesday',
+    'WED' => 'Wednesday',
+    'THU' => 'Thursday',
+    'FRI' => 'Friday',
+    'SAT' => 'Saturday',
+    'SUN' => 'Sunday'
+];
+
+$_seatType = [
+    "SF" => ["Standard", "Full"],
+    "SP" => ["Standard","Concession"],
+    "SC" => ["Standard","Child"],
+    "FA" => ["First Class", "Adult"],
+    "FC" => ["First Class","Child"],
+    "BA" => ["Bean Bag", "Adult"],
+    "BF" => ["Bean Bag","Family"],
+    "BC" => ["Bean Bag", "Child"]
+];
+
+$_prices = [
+    "full" => ["SF" => 18.5, "SP" => 15.5, "SC" => 12.5, "FA" => 30, "FC" => 25, "BA" => 33, "BF" => 30, "BC" => 30],
+    "discount" => ["SF" => 12.5, "SP" => 10.5, "SC" => 8.5, "FA" => 25, "FC" => 20, "BA" => 22, "BF" => 20, "BC" => 20]
+];
+
+// validate data has seats and other mandatory values
+function seatSelect()
+{
+    /*
+     originally was checking if submitting form only now also confirms the s
+     */
     $seatSelect = false;
     $appendingOrder = appendingOrder();
-    if ($appendingOrder){
+    if ($appendingOrder) {
         // check if seats array has greater than 0 numbers
         // iterate over all numbers
-        foreach ( $_POST["seats"] as $key => $value){
-            if (is_numeric($value) && $value > 0) {
+        global $_maxSeats;
+        foreach ($_POST["seats"] as $key => $value) {
+            if (is_numeric($value) && $value > 0 && $value <= $_maxSeats) {
                 $seatSelect = true;
                 break;
             }
@@ -23,18 +56,20 @@ function seatSelect(){
     return $seatSelect;
 }
 
-function appendingOrder() {
-    return isset($_POST["appending"])  ;
+function appendingOrder()
+{
+    return isset($_POST["appending"]);
 }
 
 function top_mid_part($pageTitle)
 {
     // highlight current menu item
     $here = $_SERVER['SCRIPT_NAME'];
-    $bits = explode('/',$here);
-    $filename = $bits[count($bits)-1];
+    $bits = explode('/', $here);
+    $filename = $bits[count($bits) - 1];
 
     $navigation = navMenu();
+    $cartContentCount = count($_SESSION["cart"]);
     $output = <<<"TOPMIDDLE"
 <!DOCTYPE html>
 <html>
@@ -56,23 +91,19 @@ function top_mid_part($pageTitle)
 </head>
 <body>
 <header>
-    <!-- wireframe switch -->
-    <div id="wireframe">
-        <span>
-            <input type="checkbox" id="wireframecss" onchange="loadCSS()">
-            <label for="wireframecss">Wireframe CSS</label>
-        </span>
-    </div>
+   
     <div class="container wrap header clearfloat">
-    <div id="cart">
-    <a 
-       href="account.php" 
-       data-modal=""><img src="img/account.svg" alt="account"></a>
-    <a 
-       href="cart.php" 
-       data-modal=""><img src="img/cart.svg" alt="cart" /></a>
-    </div>
-        <a href="index.php"><img src="img/logo_blue.png" height="122" alt="Silverado Cinema"/></a>
+        <div id="cart">
+           <!-- <a href="account.php" data-modal="">
+                <img src="img/account.svg" alt="account"></a> 
+                login / logout account. <!-- TODO create login / logout
+                -->
+            <a href="cart.php" data-modal="">
+                <img src="img/cart.svg" alt="cart" />($cartContentCount)</a>
+        </div>
+        <a href="index.php">
+            <img src="img/logo_blue.png" height="122" alt="Silverado Cinema"/>
+        </a>
     </div>
 </header>
 <nav>
@@ -89,15 +120,15 @@ TOPMIDDLE;
 }
 
 function navMenu()
-    {
-        $menuOptions = ['Home' => 'index.php', 'Now Showing' => 'showing.php'];
-        $topMenu = "";
-        $mobileMenu = "";
-        foreach ($menuOptions as $key => $value) {
-            $topMenu .= "<li><a href=\"{$value}\">$key</a></li>\r\n";
-            $mobileMenu .= "<option value=\"{$value}\">$key</option>\r\n";
-        }
-        $navigation = <<< "MENUSECTION"
+{
+    $menuOptions = ['Home' => 'index.php', 'Now Showing' => 'showing.php'];
+    $topMenu = "";
+    $mobileMenu = "";
+    foreach ($menuOptions as $key => $value) {
+        $topMenu .= "<li><a href=\"{$value}\">$key</a></li>\r\n";
+        $mobileMenu .= "<option value=\"{$value}\">$key</option>\r\n";
+    }
+    $navigation = <<< "MENUSECTION"
         <div id="menu" class="container clearfloat shadow">
         <ul>
             $topMenu
@@ -110,11 +141,13 @@ function navMenu()
         </select>
     </div>
 MENUSECTION;
-        return $navigation;
-    }
+    return $navigation;
+}
 
-function moviesShowing($filename)
+function moviesShowing()
 {
+    global $_filename;
+    $filename = $_filename;
     $row = 1;
     $movies = "";
     $options = '<option value="">Please Select</option>' . "\n";
@@ -149,11 +182,11 @@ MOVIE;
             $appendingOrder = appendingOrder();
             $seatSelect === false && $appendingOrder
                 ? $options .=
-                    sprintf('<option value="%s" %s>%s</option>',
-                        $data[7],
-                        $_POST["movie"] == $data[7] ? 'selected' : '',
-                        ucfirst($data[1])) . "\n"
-                : $options .= sprintf('<option value="%s">%s</option>', $data[7],  ucfirst($data[1])) . "\n"   ;
+                sprintf('<option value="%s" %s>%s</option>',
+                    $data[7],
+                    $_POST["movie"] == $data[7] ? 'selected' : '',
+                    ucfirst($data[1])) . "\n"
+                : $options .= sprintf('<option value="%s">%s</option>', $data[7], ucfirst($data[1])) . "\n";
         }
         fclose($handle);
     }

@@ -72,6 +72,7 @@ var debounce=function(e,t,n){var a;return function(){var r=this,i=arguments,o=fu
       modalLink = d.getElementById(modalSection.returnId);
       d.body.classList.remove(openClass);
       modalLink.focus();
+      window.location.reload(true);
     }
   };
 

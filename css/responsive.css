@@ -117,6 +117,10 @@ only screen and (max-device-width: 767px) and (min-device-pixel-ratio: 2)
         top: 0;
         left: 112px;
     }
+    .movie-detailed { width: 100%; text-align: center;    }
+    input[id^="seats"]{margin-bottom: 0;}
+    span[id$="_span"] { margin-bottom: 1.5rem; padding-left: 11px; display: block; }
+    #cartpage{font-size: 75%;}
 }
 /*  #Mobile (Portrait)
 ================================================== */
@@ -124,7 +128,7 @@ only screen and (max-device-width: 767px) and (min-device-pixel-ratio: 2)
 only screen and (max-device-width: 479px) and (-webkit-min-device-pixel-ratio: 2),
 only screen and (max-device-width: 479px) and (min-device-pixel-ratio: 2)
 {
-    .movie-detailed { width: 100%; text-align: center;    }
+
 
 }
 
